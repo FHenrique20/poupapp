@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { SaldoComponent } from "./saldo/saldo.component";
 import { TransacoesComponent } from "./transacoes/transacoes.component";
 import { ContasComponent } from "./contas/contas.component";
@@ -12,7 +12,11 @@ import { Transacao, TipoTransacao } from './compartilhados/transacao.model';
   styleUrl: './area-financeira.component.css'
 })
 export class AreaFinanceiraComponent {
-  saldo = 50.50;
+  saldo = computed(() => {
+    return this.contas().reduce((acc, conta) => {
+      return acc + conta.saldo
+    },0)
+  });
 
   transacoes = signal<Transacao[]>([
     {
@@ -57,7 +61,7 @@ export class AreaFinanceiraComponent {
     },
   ]);
 
-  contas = signal<Conta[]>([
+  contasComSaldoInicial = signal<Conta[]>([
     {
       nome: 'Anybank',
       saldo: 1000,
@@ -72,10 +76,37 @@ export class AreaFinanceiraComponent {
     },
   ]);
 
+  contas = computed(() => {
+    return this.contasComSaldoInicial().map((conta) => {
+      const saldoAtualizado = this.calculaSaldoAtualizado(conta)
+
+      return { ...conta, saldo: saldoAtualizado }
+    })
+  })
+
+  calculaSaldoAtualizado(conta: Conta) {
+    const transacoesDaConta = this.transacoes().filter((transacao) => {
+      return transacao.conta === conta.nome
+  })
+  const novoSaldo = transacoesDaConta.reduce((acc, transacao) => {
+    switch (transacao.tipo) {
+      case TipoTransacao.DEPOSITO:
+        return acc + transacao.valor
+
+      case TipoTransacao.SAQUE:
+        return acc - transacao.valor
+    
+      default:
+        transacao.tipo satisfies never
+        throw new Error('Tipo transação não identificado.')
+    }
+  }, conta.saldo);
+  return novoSaldo
+}
   processarTransacao(transacao: Transacao) {
     this.transacoes.update((transacoes) => [transacao, ...transacoes])
   }
   processarConta(conta: Conta) {
-    this.contas.update((contas) => [conta, ...contas])
+    this.contasComSaldoInicial.update((contas) => [conta, ...contas])
   }
 }

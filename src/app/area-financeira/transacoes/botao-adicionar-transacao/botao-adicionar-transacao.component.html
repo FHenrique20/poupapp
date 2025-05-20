@@ -63,10 +63,8 @@
         required
       />
     </label>
-
     <label class="label-grupo">
       Conta Bancária
-
       <select
         [(ngModel)]="novaTransacaoForm.conta"
         name="conta-transacao"
@@ -74,12 +72,13 @@
         required
       >
         <option value="" selected disabled>Selecione a conta</option>
+        @for (conta of contas(); track conta.nome) {
 
-        <option value="Anybank">Anybank</option>
-        <option value="Bytebank">Bytebank</option>
+        <option [value]="conta.nome">{{ conta.nome }}</option>
+
+        }
       </select>
     </label>
-
     <button class="btn-adicionar-transacao">Adicionar</button>
   </form>
 </app-modal>
