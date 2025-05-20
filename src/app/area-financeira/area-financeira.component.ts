@@ -25,7 +25,7 @@ export class AreaFinanceiraComponent {
       tipo: TipoTransacao.SAQUE,
       valor: 200,
       data: new Date('2025-02-20T00:00'),
-      conta: 'Switch Bank'
+      conta: 'Mercado Pago'
     },
     {
       id: '4',
@@ -33,7 +33,7 @@ export class AreaFinanceiraComponent {
       tipo: TipoTransacao.SAQUE,
       valor: 40,
       data: new Date('2025-01-15T00:00'),
-      conta: 'Bytebank'
+      conta: 'Nubank'
     },
     {
       id: '3',
