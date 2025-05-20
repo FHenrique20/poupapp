@@ -25,7 +25,7 @@ export class AreaFinanceiraComponent {
       tipo: TipoTransacao.SAQUE,
       valor: 200,
       data: new Date('2025-02-20T00:00'),
-      conta: 'Mercado Pago'
+      conta: 'Switch Bank'
     },
     {
       id: '4',
@@ -33,7 +33,7 @@ export class AreaFinanceiraComponent {
       tipo: TipoTransacao.SAQUE,
       valor: 40,
       data: new Date('2025-01-15T00:00'),
-      conta: 'Nubank'
+      conta: 'Bytebank'
     },
     {
       id: '3',
@@ -61,20 +61,7 @@ export class AreaFinanceiraComponent {
     },
   ]);
 
-  contasComSaldoInicial = signal<Conta[]>([
-    {
-      nome: 'Anybank',
-      saldo: 1000,
-    },
-    {
-      nome: 'Bytebank',
-      saldo: 0,
-    },
-    {
-      nome: 'Switch Bank',
-      saldo: 0,
-    },
-  ]);
+  contasComSaldoInicial = signal<Conta[]>([]);
 
   contas = computed(() => {
     return this.contasComSaldoInicial().map((conta) => {
